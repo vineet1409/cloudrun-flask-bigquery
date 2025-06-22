@@ -22,7 +22,7 @@ requirements.txt    # For quick local pip install (generated)
     ```
 2. **Sync dependencies:**
     ```bash
-    uv pip sync
+    uv pip sync uv.lock --system
     ```
 3. **Run locally:**
     ```bash
