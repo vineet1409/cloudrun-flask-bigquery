@@ -1,0 +1,14 @@
+[project]
+name = "cloudrun-flask-bigquery"
+version = "0.1.0"
+description = "Flask app loading CSV to BigQuery via Cloud Run"
+requires-python = ">=3.10"
+
+dependencies = [
+    "Flask>=3.0.0",
+    "google-cloud-bigquery>=3.17.2",
+    "gunicorn>=21.2.0"
+]
+
+[tool.uv]
+locked = true

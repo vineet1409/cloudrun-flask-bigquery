@@ -1,0 +1,8 @@
+uv.lock
+__pycache__/
+.env
+.env.*
+*.pyc
+*.pyo
+.DS_Store
+*.log

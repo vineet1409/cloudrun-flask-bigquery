@@ -1,0 +1,61 @@
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: mlops-project-462702
+  REGION: us-central1
+  SERVICE: py-bq-load
+  IMAGE: gcr.io/mlops-project-462702/demo-flask-app2:latest
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv pip sync
+
+      - name: Google Cloud Auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          install_components: 'beta,cloud-build,gke-gcloud-auth-plugin'
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Build Docker image
+        run: |
+          docker build -t $IMAGE .
+
+      - name: Push Docker image
+        run: |
+          docker push $IMAGE
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy $SERVICE --image $IMAGE --region $REGION -platform managed --allow-unauthenticated --port 8080
+
+      - name: Add IAM policy binding for invoker
+        run: |
+          gcloud run services add-iam-policy-binding $SERVICE --member=allUsers --role=roles/run.invoker --region=$REGION
