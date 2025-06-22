@@ -10,5 +10,3 @@ dependencies = [
     "gunicorn>=21.2.0"
 ]
 
-[tool.uv]
-locked = true
