@@ -39,7 +39,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ env.PROJECT_ID }}
-          install_components: 'beta,cloud-build,gke-gcloud-auth-plugin'
 
       - name: Configure Docker
         run: gcloud auth configure-docker --quiet
