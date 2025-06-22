@@ -53,7 +53,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy $SERVICE --image $IMAGE --region $REGION -platform managed --allow-unauthenticated --port 8080
+          gcloud run deploy $SERVICE --image $IMAGE --region $REGION --platform managed --allow-unauthenticated --port 8080
 
       - name: Add IAM policy binding for invoker
         run: |
